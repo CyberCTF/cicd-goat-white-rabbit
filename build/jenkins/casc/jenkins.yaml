@@ -1,0 +1,46 @@
+# Jenkins Configuration-as-Code for Wonderland's controller.
+#
+# The flag1 credential is a GLOBAL-scope string credential — exactly the upstream White Rabbit
+# mis-configuration (CICD-SEC-4): any pipeline on the controller can bind it. Its value is NOT in
+# this file and NOT in the image; it is resolved at boot from a file secret (`${flag1}` ->
+# $SECRETS/flag1), which the entrypoint stages from the per-player input Isoloom mounts at run time.
+jenkins:
+  systemMessage: "Wonderland CI — builds white-rabbit on every branch and pull request."
+  numExecutors: 1
+  mode: NORMAL
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "admin"
+  authorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+security:
+  globalJobDslSecurityConfiguration:
+    useScriptSecurity: false
+
+credentials:
+  system:
+    domainCredentials:
+      - credentials:
+          - string:
+              id: "flag1"
+              scope: GLOBAL
+              secret: "${flag1}"
+              description: "Wonderland release token — keep secret"
+          - usernamePassword:
+              id: "gitea-jenkins"
+              scope: GLOBAL
+              username: "jenkins"
+              password: "jenkins"
+              description: "Gitea read access for polling repositories"
+
+unclassified:
+  location:
+    url: "http://jenkins:8080/"
+
+jobs:
+  - file: /usr/share/jenkins/casc/jobdsl/white-rabbit.groovy

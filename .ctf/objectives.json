@@ -1,0 +1,20 @@
+{
+  "objectives": [
+    {
+      "key": "white-rabbit",
+      "title": "White Rabbit",
+      "prompt": "\"Oh dear! Oh dear! I shall be late!\" Wonderland runs CI on Jenkins, building the Wonderland/white-rabbit repository (hosted on Gitea) on every branch and pull request. Wonderland's release token lives in the Jenkins credential store as flag1, at Global scope — so any pipeline can read it. You have write access to the repository. Clone it, modify the Jenkinsfile to bind flag1 and print it in a form the console will not mask, push the branch and open a pull request. When the pipeline runs, read the build's console output, recover the value, and submit the flag.",
+      "check": { "evidence": "SECRET", "format": "%s" },
+      "dev": "wr-dev-flag-not-a-real-secret-0000",
+      "capabilities": [
+        "cicd-direct-poisoned-pipeline-execution",
+        "jenkins-credential-exfiltration"
+      ],
+      "hints": [
+        "A Global-scope credential can be bound by ANY pipeline on the controller — including one you introduce. Jenkins pipelines bind string credentials with withCredentials([string(credentialsId: 'flag1', variable: 'flag1')]).",
+        "Jenkins masks a bound credential's value in the console — and, on modern versions, its plain base64 too. Transform it so the masker misses it: reverse it before encoding, e.g. `echo $flag1 | rev | base64`, then undo that to recover the flag.",
+        "The multibranch pipeline builds every branch that has a Jenkinsfile and rescans about once a minute. Push your branch (and open a pull request); the build starts on its own. Read it under the wonderland-white-rabbit job."
+      ]
+    }
+  ]
+}

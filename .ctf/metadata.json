@@ -1,0 +1,14 @@
+{
+  "project_name": "cyberlabs-cicd-goat-white-rabbit",
+  "slug": "cicd-goat-white-rabbit",
+  "title": "White Rabbit: poisoned pipeline execution",
+  "description": "A Jenkins controller builds Wonderland's white-rabbit repository (hosted on Gitea) on every branch and pull request. A release token is stored as a Jenkins string credential at Global scope, so any pipeline can read it. An attacker with write access modifies the Jenkinsfile to bind the credential and exfiltrate it in a form the console will not mask, then pushes a branch / opens a pull request to run it (OWASP CICD-SEC-4, Direct Poisoned Pipeline Execution). Reproduces the \"White Rabbit\" challenge from CI/CD Goat.",
+  "category": "misc",
+  "difficulty": 2,
+  "evidence_kind": "SECRET",
+  "capabilities": [
+    "cicd-direct-poisoned-pipeline-execution",
+    "jenkins-credential-exfiltration"
+  ],
+  "question": "Perform a Direct-PPE attack against the Wonderland/white-rabbit pipeline and exfiltrate the flag1 credential from the Jenkins credential store."
+}

@@ -1,0 +1,38 @@
+// white-rabbit CI pipeline (declarative). Lint + unit tests for the whiterabbit package.
+// Runs on any available agent whenever a branch or pull request is pushed.
+pipeline {
+    agent any
+
+    environment {
+        PACKAGE = 'whiterabbit'
+    }
+
+    stages {
+        stage('Install_Requirements') {
+            steps {
+                sh '''
+                    python3 -m venv venv || true
+                    echo "requirements installed for ${PACKAGE}"
+                '''
+            }
+        }
+
+        stage('Lint') {
+            steps {
+                sh 'echo "lint ${PACKAGE}: ok"'
+            }
+        }
+
+        stage('Unit Tests') {
+            steps {
+                sh 'echo "pytest ${PACKAGE}: ok"'
+            }
+        }
+    }
+
+    post {
+        always {
+            cleanWs()
+        }
+    }
+}
