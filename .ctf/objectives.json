@@ -7,8 +7,7 @@
       "check": { "evidence": "SECRET", "format": "%s" },
       "dev": "wr-dev-flag-not-a-real-secret-0000",
       "capabilities": [
-        "cicd-direct-poisoned-pipeline-execution",
-        "jenkins-credential-exfiltration"
+        "ppe-direct-jenkins"
       ],
       "hints": [
         "A Global-scope credential can be bound by ANY pipeline on the controller — including one you introduce. Jenkins pipelines bind string credentials with withCredentials([string(credentialsId: 'flag1', variable: 'flag1')]).",
